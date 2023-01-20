@@ -4,6 +4,8 @@ Configure Vault's Nomad Credential Engine with Nomad.
 
 Issues a Nomad token with the attached Nomad policy.
 
+> This module aligns with [Vault Integration and Retrieving Dynamic Secrets](https://developer.hashicorp.com/nomad/tutorials/integrate-vault/vault-postgres#vault-postgres)
+
 ## Usage
 Add the module and assign a nomad policy for the tokens that will be issued.
 
