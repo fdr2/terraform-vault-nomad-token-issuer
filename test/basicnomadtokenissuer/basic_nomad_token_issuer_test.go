@@ -1,6 +1,7 @@
-package basic_nomad_token_issuer
+package basicnomadtokenissuertest
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"gotest.tools/v3/assert"
@@ -15,8 +16,8 @@ import (
 )
 
 type VaultNomadSecretsEngineConfig struct {
-	RequestId     string `json:"request_id"`
-	LeaseId       string `json:"lease_id"`
+	RequestID     string `json:"request_id"`
+	LeaseID       string `json:"lease_id"`
 	Renewable     bool   `json:"renewable"`
 	LeaseDuration int    `json:"lease_duration"`
 	Data          struct {
@@ -31,8 +32,8 @@ type VaultNomadSecretsEngineConfig struct {
 }
 
 type VaultNomadSecretsAuthRole struct {
-	RequestId     string `json:"request_id"`
-	LeaseId       string `json:"lease_id"`
+	RequestID     string `json:"request_id"`
+	LeaseID       string `json:"lease_id"`
 	Renewable     bool   `json:"renewable"`
 	LeaseDuration int    `json:"lease_duration"`
 	Data          struct {
@@ -94,7 +95,7 @@ func TestBasicNomadTokenIssuer(t *testing.T) {
 
 	// Inspect Vault Nomad Secrets Config
 	url := fmt.Sprintf("%s/v1/__test/nomad/config/access", vaultAddr)
-	body := GetApi(url, vaultToken)
+	body := GetAPI(url, vaultToken)
 	var config VaultNomadSecretsEngineConfig
 	err := json.Unmarshal(body, &config)
 	if err != nil {
@@ -106,7 +107,7 @@ func TestBasicNomadTokenIssuer(t *testing.T) {
 
 	// Inspect Vault Nomad Token Role
 	url = fmt.Sprintf("%s/v1/__test/nomad/role/nomad-ops", vaultAddr)
-	body = GetApi(url, vaultToken)
+	body = GetAPI(url, vaultToken)
 	var role VaultNomadSecretsAuthRole
 	err = json.Unmarshal(body, &role)
 	if err != nil {
@@ -118,14 +119,20 @@ func TestBasicNomadTokenIssuer(t *testing.T) {
 }
 
 // Helper method to get Vault API for validation
-func GetApi(url string, vaultToken string) []byte {
+func GetAPI(url string, vaultToken string) []byte {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 	req.Header.Add("X-Vault-Token", vaultToken)
 
-	res, err := http.DefaultClient.Do(req)
+	//res, err := http.DefaultClient.Do(req)
+	// Skip Verify on API calls in tests
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
+	res, err := client.Do(req)
 	if err != nil {
 		fmt.Print(err.Error())
 	}
@@ -140,8 +147,7 @@ func GetApi(url string, vaultToken string) []byte {
 	if readErr != nil {
 		fmt.Print(err.Error())
 	}
-	fmt.Println("Response Body")
-	fmt.Println(string(body))
+	//fmt.Println(string(body))
 
 	return body
 }

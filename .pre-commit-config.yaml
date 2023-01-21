@@ -9,8 +9,6 @@ repos:
       - id: terraform-validate
       - id: shellcheck
       - id: gofmt
-        args:
-          - "test/basic_nomad_token_issuer_test/..."
       - id: golint
   - repo: git://github.com/antonbabenko/pre-commit-terraform
     rev: v1.56.0

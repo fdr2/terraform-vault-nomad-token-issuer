@@ -1,6 +1,11 @@
-module basic_nomad_token_issuer
+module test/basicnomadtokenissuer
 
 go 1.19
+
+require (
+	github.com/gruntwork-io/terratest v0.41.9
+	gotest.tools/v3 v3.4.0
+)
 
 require (
 	cloud.google.com/go v0.83.0 // indirect
@@ -15,7 +20,6 @@ require (
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/google/go-cmp v0.5.7 // indirect
 	github.com/googleapis/gax-go/v2 v2.0.5 // indirect
-	github.com/gruntwork-io/terratest v0.41.9 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-getter v1.6.1 // indirect
@@ -53,5 +57,4 @@ require (
 	google.golang.org/grpc v1.38.0 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
-	gotest.tools/v3 v3.4.0 // indirect
 )
