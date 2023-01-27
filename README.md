@@ -12,6 +12,7 @@ Add the module and assign a nomad policy for the tokens that will be issued.
 ```terraform
 module "vault-nomad-token-issuer" {
   source       = "app.terraform.io/DiRoccos/nomad-token-issuer/vault"
+  version      = "0.0.3"
   nomad_token  = var.nomad_token
   backend_name = "nomad"
   nomad_roles  = {
