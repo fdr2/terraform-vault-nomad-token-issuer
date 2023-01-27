@@ -12,31 +12,37 @@ variable "backend_description" {
   default = "Managed by Terraform"
 }
 
-variable "max_lease_ttl_seconds" {
-  type    = number
-  default = 86400 # 24 hours
+variable "disable_remount" {
+  default = false
 }
 
-variable "max_ttl" {
+variable "default_lease_ttl_seconds" {
+  default = null
+}
+
+variable "max_lease_ttl_seconds" {
   type    = number
-  default = 36000 # 10 hours
+  default = null
 }
 
 variable "address" {
   type    = string
-  default = "http://nomad.service.consul:4646"
+  default = "https://nomad.service.consul:4646"
 }
 
-variable "ttl" {
-  type    = number
-  default = 14400 # 4 hours
+variable "nomad_ca_cert" {
+  default = null
 }
 
-variable "vault_role_name" {
-  type    = string
-  default = "nomad-ops"
+variable "nomad_client_cert" {
+  default = null
 }
 
-variable "policies" {
-  type = list(string)
+variable "nomad_client_key" {
+  default = null
+}
+
+variable "nomad_roles" {
+  type    = any
+  default = null
 }

@@ -11,14 +11,22 @@ Add the module and assign a nomad policy for the tokens that will be issued.
 
 ```terraform
 module "vault-nomad-token-issuer" {
-  source      = "./modules/terraform-vault-nomad-token-issuer"
-  nomad_token = var.nomad_token
-  policies    = ["nomad-ops"]
+  source       = "app.terraform.io/DiRoccos/nomad-token-issuer/vault"
+  nomad_token  = var.nomad_token
+  backend_name = "nomad"
+  nomad_roles  = {
+    "nomad-ops" : {
+      type : "management"
+    }
+    "nomad-server" : {
+      policies : ["nomad-server"]
+    }
+  }
 }
 
-resource "vault_policy" "nomad-ops" {
-  name     = "nomad-ops"
-  policy   = file("policies/nomad-ops.hcl")
+resource "nomad_policy" "nomad-server" {
+  name     = "nomad-server"
+  policy   = file("policies/nomad-server.hcl")
 }
 ```
 
@@ -69,7 +77,3 @@ go test
 ```
 
 ## TODO
-
-* write local vault dev example
-* write tests
-

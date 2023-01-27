@@ -94,8 +94,9 @@ func TestBasicNomadTokenIssuer(t *testing.T) {
 	fmt.Println("Testing API")
 
 	// Inspect Vault Nomad Secrets Config
-	url := fmt.Sprintf("%s/v1/__test/nomad/config/access", vaultAddr)
+	url := fmt.Sprintf("%s/v1/__test_nomad/config/access", vaultAddr)
 	body := GetAPI(url, vaultToken)
+	//fmt.Println(string(body))
 	var config VaultNomadSecretsEngineConfig
 	err := json.Unmarshal(body, &config)
 	if err != nil {
@@ -104,10 +105,12 @@ func TestBasicNomadTokenIssuer(t *testing.T) {
 
 	assert.Equal(t, config.LeaseDuration, 0)
 	assert.Equal(t, config.Renewable, false)
+	assert.Equal(t, config.Data.Address, "https://nomad.service.consul:4646")
 
-	// Inspect Vault Nomad Token Role
-	url = fmt.Sprintf("%s/v1/__test/nomad/role/nomad-ops", vaultAddr)
+	// Inspect Vault Nomad Ops Token Role
+	url = fmt.Sprintf("%s/v1/__test_nomad/role/__test_nomad-ops", vaultAddr)
 	body = GetAPI(url, vaultToken)
+	fmt.Println(string(body))
 	var role VaultNomadSecretsAuthRole
 	err = json.Unmarshal(body, &role)
 	if err != nil {
@@ -115,7 +118,19 @@ func TestBasicNomadTokenIssuer(t *testing.T) {
 	}
 
 	assert.Equal(t, role.Data.Global, false)
-	assert.DeepEqual(t, role.Data.Policies, []string{"__test/nomad-ops"})
+	assert.Equal(t, role.Data.Type, "management")
+
+	// Inspect Vault Nomad Ops Token Role
+	url = fmt.Sprintf("%s/v1/__test_nomad/role/__test_nomad-server", vaultAddr)
+	body = GetAPI(url, vaultToken)
+	//fmt.Println(string(body))
+	err = json.Unmarshal(body, &role)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	assert.Equal(t, role.Data.Global, false)
+	assert.DeepEqual(t, role.Data.Policies, []string{"__test_nomad-server"})
 }
 
 // Helper method to get Vault API for validation
