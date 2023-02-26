@@ -4,7 +4,8 @@ resource "vault_nomad_secret_backend" "this" {
   description               = var.backend_description
   disable_remount           = var.disable_remount
   default_lease_ttl_seconds = var.default_lease_ttl_seconds
-  max_lease_ttl_seconds     = var.max_lease_ttl_seconds
+  max_ttl                   = var.max_ttl
+  ttl                       = var.ttl
   address                   = var.address
   token                     = var.nomad_token
   ca_cert                   = var.nomad_ca_cert

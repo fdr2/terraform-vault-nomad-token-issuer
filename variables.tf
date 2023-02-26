@@ -20,7 +20,12 @@ variable "default_lease_ttl_seconds" {
   default = null
 }
 
-variable "max_lease_ttl_seconds" {
+variable "max_ttl" {
+  type    = number
+  default = null
+}
+
+variable "ttl" {
   type    = number
   default = null
 }
